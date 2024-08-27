@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background: linear-gradient(to right, #3498db, #2c3e50);
+      }
+
+      .login-container {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 400px;
+        height: 500px;
+      }
+
+      .logo img {
+        width: 100px; /* Adjust the width as needed */
+        height: auto; /* Maintain aspect ratio */
+        margin-bottom: 1rem; /* Add some space below the logo */
+        border-radius: 100%;
+      }
+
+      .input-container {
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      label {
+        position: absolute;
+        top: -10px;
+        left: 10px;
+        background: #fff;
+        padding: 0 5px;
+        font-size: 12px;
+        color: #666;
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+      }
+
+      .login-btn {
+        width: 100%;
+        padding: 0.5rem;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .login-btn:hover {
+        background-color: #0056b3;
+      }
+
+      .alternative-login {
+        margin-top: 1rem;
+      }
+
+      .google-btn,
+      .mobile-btn {
+        width: 100%;
+        padding: 0.5rem;
+        border: none;
+        background-color: #db4437;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 0.5rem;
+      }
+
+      .mobile-btn {
+        background-color: #4285f4;
+      }
+
+      .google-btn:hover {
+        background-color: #c33c29;
+      }
+
+      .mobile-btn:hover {
+        background-color: #3367d6;
+      }
+
+      .register-link {
+        margin-top: 1rem;
+      }
+
+      .register-link a {
+        color: #007bff;
+        text-decoration: none;
+      }
+
+      .register-link a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="logo">
+        <img src="C:\Users\91948\Desktop\final.png" alt="ParkSpot Logo" />
+        <h3>Smart Parking</h3>
+        <!-- Replace with actual logo image path -->
+      </div>
+
+      <form id="loginForm">
+        <div class="input-container">
+          <input type="text" id="username" name="username" required />
+          <label for="username">Username</label>
+        </div>
+        <div class="input-container">
+          <input type="password" id="password" name="password" required />
+          <label for="password">Password</label>
+          <span class="toggle-password" onclick="togglePassword()">👁️</span>
+        </div>
+        <br />
+        <button type="submit" class="login-btn">Dive In</button>
+        <div class="alternative-login">
+          <button type="button" class="google-btn">Sign in with Google</button>
+          <button type="button" class="mobile-btn">Sign in with Mobile</button>
+        </div>
+        <br />
+        <div class="register-link">
+          <p>Not a member yet? <a href="register.html">Register Now</a></p>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          var username = document.getElementById("username").value;
+          var password = document.getElementById("password").value;
+
+          // Hardcoded username and password
+          var validUsername = "vishnu";
+          var validPassword = "1234";
+
+          if (username === validUsername && password === validPassword) {
+            window.location.href = "index.html"; // Redirect to another HTML page
+          } else {
+            alert("Invalid username or password");
+          }
+        });
+
+      function togglePassword() {
+        var passwordField = document.getElementById("password");
+        var passwordFieldType = passwordField.getAttribute("type");
+        if (passwordFieldType === "password") {
+          passwordField.setAttribute("type", "text");
+        } else {
+          passwordField.setAttribute("type", "password");
+        }
+      }
+    </script>
+  </body>
+</html>

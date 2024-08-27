@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking Dashboard</title>
+    <style>
+       
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    background: linear-gradient(to right, #3498db, #2c3e50);
+}
+
+.sidebar {
+    width: 200px;
+    color: #ecf0f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.sidebar-header {
+    text-align: center;
+    padding: 15px;
+    background-color: #34495e;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #34495e;
+}
+
+.sidebar ul li a {
+    color: #ecf0f1;
+    text-decoration: none;
+    display: block;
+}
+
+.sidebar ul li a:hover {
+    background-color: #16a085;
+}
+
+.main-content {
+    margin-left: 206px;
+    padding: 20px;
+    width: calc(85% - 200px);
+    color: #2c3e50;
+    
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #fff;
+}
+
+.info-cards {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.1);
+    margin-right: 0px;
+    color: #ecf0f1;
+    padding: 5px;
+    border-radius: 10px;
+    text-align: center;
+    width: 30%;
+}
+.info-cards {
+    display: flex;
+    flex-direction: row;
+    gap: 30px; /* Reduce the space between the cards */
+}
+
+.card h3 {
+    margin: 0;
+    font-size: 36px;
+}
+
+.card p {
+    margin: 20px 0;
+    font-size: 18px;
+}
+
+.card a {
+    color: #ecf0f1;
+    text-decoration: none;
+    display: block;
+    margin-top: 10px;
+}
+
+.card a:hover {
+    text-decoration: underline;
+}
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+/* Specific CSS for the specified text elements to be pure black */
+#book-slot h1,
+#book-slot label,
+#dashboard .header p,
+#profile label,
+#report-content,
+#report-content p,
+#report-content span,
+#report h1,
+#settings h1,
+#total-slots-info h1,
+#total-slots-info p,
+#total-users-info h1,
+#total-users-info p,
+#occupied-slots-info h1,
+#occupied-slots-info p {
+    color: #000; /* Pure black */
+}
+
+/* Specific CSS for each label in the profile section */
+#profile-form label {
+    color: #000; /* Pure black */
+}
+
+/* Specific CSS for years, months, and weeks in the reports section */
+#report-content span {
+    color: #000; /* Pure black */
+}
+
+/* Additional selectors for other specified text elements */
+#book-slot-form label,
+#book-slot-form input {
+    color: #000;
+  /* Pure black */
+}
+
+.header h1,
+#profile h1,
+#settings h1 {
+    color: #000; /* Pure black */
+}
+
+.info-cards .card p,
+.info-cards .card h3 {
+    color: #000; /* Pure black */
+}
+
+#dashboard .header p,
+#report h1 {
+    color: #000; /* Pure black */
+}
+
+#report-content li {
+    color: #000; /* Pure black */
+}
+
+#settings h1 {
+    color: #000; /* Pure black */
+}
+
+/* Specific CSS for the specified text elements to be pure white */
+#total-slots h3,
+#total-users h3,
+#occupied-slots h3,
+#total-slots p,
+#total-users p,
+#occupied-slots p,
+#total-slots .more-info-link,
+#total-users .more-info-link,
+#occupied-slots .more-info-link {
+    color: #fff; /* Pure white */
+}
+
+/* Align profile form input boxes */
+#profile-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+}
+
+#profile-form label {
+    margin-bottom: 5px;
+}
+
+#profile-form input {
+    margin-bottom: 5px;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#profile-form button {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#profile-form button:hover {
+    background-color: #2980b9;
+}
+
+#settings-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-button {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.settings-button:hover {
+    background-color: #2980b9;
+}
+
+.settings-section {
+    display: none;
+}
+
+.settings-section.active {
+    display: block;
+}
+/* Add the following CSS to your existing styles.css file */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+select {
+    width: 200px;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button[type="submit"] {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #2980b9;
+}
+.report-content {
+    margin-top: 20px;
+}
+
+.report-item {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.report-item h2 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.report-item ul {
+    list-style: none;
+    padding: 0;
+}
+
+.report-item li {
+    margin-bottom: 20px;
+}
+input[type="time"],
+input[type="time"],
+input[type="number"],
+input[type="text"]{
+    width: 200px; /* Set your desired width here */
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+#slot-type {
+    width: 200px; /* Set your desired width here */
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#booking-date {
+    width: 200px; /* Set your desired width here */
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.payment-options {
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-option {
+    margin-bottom: 10px;
+}
+
+.payment-option label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #000; /* Dark black color */
+}
+
+.payment-option input[type="radio"] {
+    display: none; /* Hide the radio buttons */
+}
+
+.payment-option img {
+    width: 100px; /* Adjust the image size as needed */
+    height: 100px;
+    margin-right: 10px; /* Add some spacing between the image and the text */
+}
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #000; /* Dark black text */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="file"],
+select {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button[type="submit"],
+button[type="button"] {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover,
+button[type="button"]:hover {
+    background-color: #2980b9;
+}
+.settings-section {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #000; /* Dark black text */
+}
+
+input[type="text"],
+input[type="time"],
+select {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button[type="submit"],
+button[type="button"] {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover,
+button[type="button"]:hover {
+    background-color: #2980b9;
+}
+
+.custom-notification {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.custom-notification input {
+    margin-right: 10px;
+}
+
+#dnd-settings {
+    margin-top: 10px;
+}
+
+#notification-preview {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+#booking-time {
+    width: 200px; /* Change width as needed */
+    height: 40px; /* Change height as needed */
+    padding: 10px; /* Change padding as needed */
+    font-size: 16px; /* Change font size as needed */
+    border: 1px solid #ccc; /* Optional border styling */
+    border-radius: 4px; /* Optional rounded corners */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+/* Style for the booking fee input box */
+#booking-fee {
+    width: 2px; /* Change width as needed */
+    height: 4px; /* Change height as needed */
+    padding: 10px; /* Change padding as needed */
+    font-size: 16px; /* Change font size as needed */
+    border: 1px solid #ccc; /* Optional border styling */
+    border-radius: 4px; /* Optional rounded corners */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+
+}
+
+#nearby-sites {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.sites-card {
+    width: 300px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+}
+
+.sites-card h3 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #000; /* Dark black text color */
+}
+
+.sites-card p {
+    margin: 10px 0;
+    color: #000; /* Dark black text color */
+}
+
+.sites-card .slots-free,
+.sites-card .slots-occupied {
+    font-weight: bold;
+    color: #000; /* Dark black text color */
+}
+
+.sites-card .book-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.sites-card .book-btn:hover {
+    background-color: ;
+}
+
+.logo {
+  position: absolute;
+  top: 10px; /* Adjust as needed */
+  right: 10px; /* Adjust as needed */
+  width: 100px; /* Adjust the width of your logo */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 100px;
+}
+
+#dashboard {
+  display: block;
+}
+
+.feedback-form {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.feedback-form h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.feedback-form textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical; /* Allows vertical resizing of the textarea */
+    box-sizing: border-box; /* Ensures padding and border are included in width */
+    margin-bottom: 10px;
+}
+
+.feedback-form button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.feedback-form button:hover {
+    background-color: #2980b9;
+}
+
+
+    </style>
+</head>
+<body>
+
+
+ <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>User</h2>
+        </div> 
+        <ul>
+            <li><a href="#" id="dashboard-link">Dashboard</a></li>
+            <li><a href="#" id="book-slot-link">Book Slot</a></li>
+            <li><a href="#" id="profile-link">Profile</a></li>
+            <li><a href="#" id="report-link">Reports</a></li>
+            <li><a href="#" id="settings-link">Settings</a></li>
+            <li><a href="#"></a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2JMV5ff2vtxTt_QljTxbyD-Qu9a43JNze5hNqtUR-Oq1HHZeb" alt="Your Logo" class="logo">
+        <div id="dashboard" class="section">
+            <div class="header">
+                <h1>Dashboard</h1>
+                <h3 style="color: #000;">Control panel</h3>
+                <p></p>
+ 
+            </div>
+            <div class="info-cards">
+                <div class="card" id="total-slots">
+                    <h3>0</h3>
+                    <p>Total Parking Slots</p>
+                    <a href="#" class="more-info-link" data-target="total-slots-info">More info</a>
+                </div>
+                <div class="card" id="total-users">
+                    <h3>1</h3>
+                    <p>Remaining Slots</p>
+                    <a href="#" class="more-info-link" data-target="total-users-info">More info</a>
+                </div>
+                <div class="card" id="occupied-slots">
+                    <h3>0</h3>
+                    <p>Occupied Slots</p>
+                    <a href="#" class="more-info-link" data-target="occupied-slots-info">More info</a>
+                </div>
+            </div>
+          
+          <br>
+          <hr>
+          <br>
+          
+          <h2 style="color: #000;">Nearby Sites</h2>
+
+    <div id="nearby-sites">
+        <!-- Each site will have its own card -->
+        <div class="sites-card">
+            <h3>Fun Mall</h3>
+            <p>Slots Free: <span class="slots-free">10</span></p>
+            <p>Occupied Slots: <span class="slots-occupied">5</span></p>
+            <button style="background-color: blue; border: none; padding: 10px;">
+                <a href="#" class="more-info-link" data-target="book-slot" style="color: white; text-decoration: none;">Book</a>
+            </button>
+
+        </div>
+        <!-- Add more site cards as needed -->
+    </div>
+          
+          <br><br>
+          
+          
+    <div id="nearby-sites2">
+        <!-- Each site will have its own card -->
+        <div class="sites-card">
+            <h3>Prozone Mall</h3>
+            <p>Slots Free: <span class="slots-free2">9</span></p>
+            <p>Occupied Slots: <span class="slots-occupied2">4</span></p>
+            <button style="background-color: blue; border: none; padding: 10px;">
+                <a href="#" class="more-info-link" data-target="book-slot" style="color: white; text-decoration: none;">Book</a>
+            </button>
+
+
+        </div>
+      
+      
+        <!-- Add more site cards as needed -->
+    </div>
+          <br><br>
+          
+          <div id="nearby-sites3">
+        <!-- Each site will have its own card -->
+        <div class="sites-card">
+            <h3>Brookfields Mall</h3>
+            <p>Slots Free: <span class="slots-free3">5</span></p>
+            <p>Occupied Slots: <span class="slots-occupied3">10</span></p>
+            <button style="background-color: blue; border: none; padding: 10px;">
+                <a href="#" class="more-info-link" data-target="book-slot" style="color: white; text-decoration: none;">Book</a>
+            </button>
+
+
+        </div>
+  
+        <!-- Add more site cards as needed -->
+    </div>
+          
+        </div>
+      
+      
+      
+      
+      
+        <div id="total-slots-info" class="section" style="display: none;">
+            <h1>Total Parking Slots</h1>
+            <p>Detailed information about total parking slots...</p>
+            <p>Total Parking Slots:
+
+The parking facility comprises a total of 100 parking slots, which are essential for accommodating vehicles of various sizes and types. These slots are strategically organized to optimize space utilization and ensure efficient parking management within the system.
+              
+              <br><br>
+
+Categorization:
+
+Within the parking infrastructure, slots are divided into two primary categories: Regular and Premium. Each category serves specific purposes based on the requirements of the vehicles they accommodate.
+              <br><br>
+
+
+In summary, the detailed information about total parking slots highlights the comprehensive approach taken to manage parking resources effectively, catering to the diverse needs of vehicle owners while ensuring convenience, accessibility, and operational efficiency within the system.</p>
+        </div>
+        <div id="total-users-info" class="section" style="display: none;">
+            <h1>Remaining Slots</h1>
+            <p>Detailed information about Remaining Slots...</p>
+            <p>Dynamic signage at parking entrances displays the current number of available slots, reducing search time for drivers. Reservation systems guarantee parking spaces, particularly useful in high-demand areas. Predictive analytics analyze historical data to anticipate future demand, allowing proactive adjustments to resource allocation. Mobile applications offer real-time updates on parking availability and navigation assistance, further streamlining the parking experience. These strategies collectively ensure efficient parking resource management and improve overall user satisfaction.
+          </p>
+        </div>
+        <div id="occupied-slots-info" class="section" style="display: none;">
+            <h1>Occupied Slots</h1>
+            <p>Detailed information about occupied slots...</p>
+            <p>The parking system is efficiently managed through a comprehensive overview of slot occupancy. This allows administrators to strategically allocate resources based on occupancy patterns observed over time. By identifying peak usage hours, administrators can ensure optimal resource distribution, minimizing congestion and enhancing overall efficiency. This proactive approach to resource management ensures a seamless experience for both users and administrators.
+              
+              
+          </p>
+        </div>
+        <div id="book-slot" class="section" style="display: none;">
+    <h1>Book a Slot</h1>
+    <form id="book-slot-form">
+        <label for="slot-type">Slot Type:</label>
+        <select id="slot-type" name="slot-type">
+            <option value="regular">Regular</option>
+            <option value="premium">Premium</option>
+        </select><br><br>
+        <!-- New Feature: Date and Time Selection -->
+        <label for="booking-date">Booking Date:</label>
+        <input type="date" id="booking-date" name="booking-date"><br><br>
+        <label for="booking-time">Booking Time:</label>
+        <input type="time" id="booking-time" name="booking-time"><br><br>
+        <!-- New Feature: Duration Selection -->
+        <label for="duration">Duration (in hours):</label>
+        <input type="number" id="duration" name="duration" min="1" value="1"><br><br>
+        <label for="fee">Booking Fee:</label>
+        <input type="text" id="fee" name="fee" readonly style="width: 200px;"><br><br>
+        <button type="submit">Book Slot</button>
+    </form>
+</div>
+        <div id="profile" class="section" style="display: none;">
+            <h1>Profile</h1>
+            <form id="profile-form">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username"><br><br>
+                <label for="first-name">First Name:</label>
+                <input type="text" id="first-name" name="first-name"><br><br>
+                <label for="last-name">Last Name:</label>
+                <input type="text" id="last-name" name="last-name"><br><br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email"><br><br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password"><br><br>
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age"><br><br>
+                
+                <button type="submit">Update Profile</button>
+            </form>
+        </div>
+      
+        <div id="report" class="section" style="display: none;">
+    <h1>Reports</h1>
+    <div id="report-content" class="report-content">
+        <div class="report-item">
+            <h2>Vehicle Data for Past Periods</h2>
+            <ul>
+                <li><strong>Years:</strong> 36005</li>
+                <li><strong>Months:</strong> 3108</li>
+                <li><strong>Weeks:</strong> 892</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="feedback-form">
+        <h2>Feedback Form</h2>
+        <form id="feedbackForm">
+            <textarea id="feedbackText" name="feedbackText" placeholder="Enter your feedback..." rows="5" required></textarea>
+            <button type="submit">Submit Feedback</button>
+        </form>
+    </div>
+    
+
+</div>
+      
+
+        <div id="settings" class="section" style="display: none;">
+            <h1>Settings</h1>
+            <div id="settings-menu">
+                <button class="settings-button" data-target="account-settings" style="width: 250px;">Account Settings</button>
+                <button class="settings-button" data-target="payment-settings" style="width: 250px;">Payment Settings</button>
+                <button class="settings-button" data-target="notification-settings" style="width: 250px;">Notification Settings</button>
+              
+               
+               
+                <button class="settings-button" id="logout-button" style="width: 250px;">Log Out</button>
+            </div>
+          
+          <hr>
+            <div id="account-settings" class="settings-section" style="display: none;">
+                <h2 style="color: #000;">Account Settings</h2>
+                
+              <form id="account-settings-form">
+        <div class="form-group">
+            <label for="profile-picture">Profile Picture:</label>
+            <input type="file" id="profile-picture" name="profile-picture" accept="image/*" style="width: 200px;">
+
+        </div>
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" value="JohnDoe123" style="width: 200px;">
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="john.doe@example.com" style="width: 200px;">
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" value="123-456-7890" style="width: 200px;">
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" style="width: 200px;">
+        </div>
+        <div class="form-group">
+            <label for="confirm-password">Confirm Password:</label>
+            <input type="password" id="confirm-password" name="confirm-password" style="width: 200px;">
+        </div>
+        <button type="submit">Save Changes</button>
+                
+               
+    </form>
+               <br>
+              
+              <div class="form-group">
+    <label for="two-factor-auth">Two-Factor Authentication:</label>
+    <input type="checkbox" id="two-factor-auth" name="two-factor-auth" >
+    <label for="two-factor-auth">Enable</label>
+</div>
+              <div class="form-group">
+    <label for="language">Language Preference:</label>
+    <select id="language" name="language" style="width: 200px;">
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <!-- Add more languages as needed -->
+    </select>
+</div>
+              
+              <div class="form-group">
+    <label for="timezone" >Time Zone:</label>
+    <select id="timezone" name="timezone" style="width: 200px;">
+        <option value="EST">Eastern Standard Time (EST)</option>
+        <option value="CST">Central Standard Time (CST)</option>
+        <option value="PST">Pacific Standard Time (PST)</option>
+        <!-- Add more time zones as needed -->
+    </select>
+</div>
+
+              <div class="form-group">
+    <label for="delete-account">Delete Account:</label>
+    <button type="button" id="delete-account" style="background-color: red; color: white;">Delete Account</button>
+</div>
+
+
+
+              <div id="profile-data">
+        
+    </div>
+            </div>
+            <div id="payment-settings" class="settings-section" style="display: none;">
+                <h2 style="color: #000;">Payment Settings</h2>
+
+                <!-- Add payment settings inputs here -->
+              <div class="payment-options">
+        <div class="payment-option">
+            <input type="radio" id="gpay-option" name="payment-option" value="gpay">
+            <label for="gpay-option">
+              
+                <img src="https://i.pinimg.com/originals/8d/ec/e1/8dece15cc40aaf66ed47f6591b639d06.png" alt="Google Pay">
+                Google Pay
+            </label>
+        </div>
+                <br>
+        <div class="payment-option">
+            <input type="radio" id="phonepe-option" name="payment-option" value="phonepe">
+            <label for="phonepe-option">
+                <img src="https://i.pinimg.com/736x/db/42/53/db4253052cfc0f80ac281486c19f9d57.jpg" alt="PhonePe">
+                PhonePe
+            </label>
+        </div>
+                <br>
+        <div class="payment-option">
+            <input type="radio" id="credit-card-option" name="payment-option" value="credit-card">
+            <label for="credit-card-option">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Credit-cards.jpg/1280px-Credit-cards.jpg" alt="Credit Card">
+                Credit Card
+            </label>
+        </div>
+              
+                <br>
+                <div class="form-group">
+    <label for="default-method">Default Payment Method:</label>
+    <select id="default-method" name="default-method" style="width: 200px;">
+        <option value="1">**** **** **** 1234</option>
+        <option value="2">FAUCET Account</option>
+        <!-- Populate options dynamically based on saved methods -->
+    </select>
+</div>
+                
+
+    </div>
+            </div>
+            <div id="notification-settings" class="settings-section" style="display: none;">
+                <h2 style="color: #000;">Notification Settings</h2>
+               <form id="notification-settings-form">
+        <div class="form-group">
+            <label for="email-notifications" style="width: 200px;">Email Notifications:</label>
+            <select id="email-notifications" name="email-notifications" style="width: 200px;">
+                <option value="all">All Notifications</option>
+                <option value="important">Only Important</option>
+                <option value="none">None</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="sms-notifications">SMS Notifications:</label>
+            <select id="sms-notifications" name="sms-notifications" style="width: 200px;">
+                <option value="all">All Notifications</option>
+                <option value="important">Only Important</option>
+                <option value="none">None</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="push-notifications">Push Notifications:</label>
+            <select id="push-notifications" name="push-notifications" style="width: 200px;">
+                <option value="all">All Notifications</option>
+                <option value="important">Only Important</option>
+                <option value="none">None</option>
+            </select>
+          </br>
+          
+                  <div class="form-group">
+            <label for="notification-frequency">Notification Frequency:</label>
+            <select id="notification-frequency" name="notification-frequency" style="width: 200px;">
+                <option value="immediately">Immediately</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="custom-notifications">Custom Notifications:</label>
+            <div id="custom-notifications">
+                <div class="custom-notification">
+                    <input type="checkbox" id="custom1" name="custom1">
+                    <label for="custom1">Notify me when a new message is received</label>
+                </div>
+                <div class="custom-notification">
+                    <input type="checkbox" id="custom2" name="custom2">
+                    <label for="custom2">Notify me about promotional offers</label>
+                </div>
+              
+              
+                <!-- Add more custom notifications as needed -->
+            </div>
+        </div>
+
+                <!-- Add notification settings inputs here -->
+            </div>
+            <div id="booking-preferences" class="settings-section" style="display: none;">
+                <h2 style="color: #000;">Booking Preferences</h2>
+                <!-- Add booking preferences inputs here -->
+            </div>
+            <div id="security-settings" class="settings-section" style="display: none;">
+                <h2 style="color: #000;">Security Settings</h2>
+                <!-- Add security settings inputs here -->
+              
+            </div>
+            <div id="app-preferences" class="settings-section" style="display: none;">
+                <h2 style="color: #000;">App Preferences</h2>
+                <!-- Add app preferences inputs here -->
+              
+            </div>
+        </div>
+    </div>
+    
+
+
+    <script>
+        
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Other code...
+
+    // Event listener for submitting the profile form
+    document.getElementById('profile-form').addEventListener('submit', (event) => {
+        event.preventDefault();  
+        updateProfile();
+    });
+
+    // Function to update profile
+    function updateProfile() {
+        // Get the form elements
+        const username = document.getElementById('username').value;
+        const firstName = document.getElementById('first-name').value;
+        const lastName = document.getElementById('last-name').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const age = document.getElementById('age').value;
+        
+        // Check if any required field is empty
+        if (!username || !firstName || !lastName || !email || !password || !age) {
+            // Display an alert indicating that fields need to be filled out
+            alert('Please fill out all the fields.');
+        } else {
+            // Otherwise, proceed with updating the profile (you would have your actual logic here)
+            // For demonstration purposes, just display a success message
+            alert('Profile updated successfully!');
+        }
+    }
+});
+
+
+ document.addEventListener('DOMContentLoaded', () => {
+    const slotRates = {
+        regular: 10,
+        premium: 20
+    };
+    
+    const state = {
+        totalSlots: 100,
+        occupiedSlots: 70,
+        users: 30,
+        userProfile: {
+            name: 'John Doe',
+            email: 'john.doe@example.com'
+        }
+    };
+    
+    // Initialize dashboard
+    updateDashboard();
+
+    // Event listeners for navigation
+    document.getElementById('dashboard-link').addEventListener('click', () => showSection('dashboard'));
+    document.getElementById('book-slot-link').addEventListener('click', () => showSection('book-slot'));
+    document.getElementById('profile-link').addEventListener('click', () => showSection('profile'));
+    document.getElementById('report-link').addEventListener('click', () => showSection('report'));
+    document.getElementById('settings-link').addEventListener('click', () => showSection('settings'));
+
+    // Event listener for slot type change
+    document.getElementById('slot-type').addEventListener('change', (event) => {
+        document.getElementById('fee').value = slotRates[event.target.value];
+    });
+
+    // Event listener for booking slot
+    document.getElementById('book-slot-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        bookSlot();
+    });
+   
+   // Event listener for updating profile
+    document.getElementById('profile-form').addEventListener('submit', (event) => {
+        event.preventDefault();  
+        updateProfile();
+    });
+   
+
+    // Update dashboard data
+    function updateDashboard() {
+        document.getElementById('total-slots').querySelector('h3').innerText = state.totalSlots;
+        document.getElementById('total-users').querySelector('h3').innerText = state.users;
+        document.getElementById('occupied-slots').querySelector('h3').innerText = state.occupiedSlots;
+    }
+
+    // Show specified section
+    function showSection(sectionId) {
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById(sectionId).style.display = 'block';
+    }
+
+    // Book a slot
+     function bookSlot() {
+        if (state.occupiedSlots < state.totalSlots && state.users > 0) {
+            state.occupiedSlots++;
+            state.users--;
+            updateDashboard();
+            alert('Slot booked successfully!');
+        } else if (state.occupiedSlots >= state.totalSlots) {
+            alert('No available slots!');
+        } else {
+            alert('No users available to book a slot!');
+        }
+    }
+});
+
+function calculateFee() {
+    const slotType = document.getElementById('slot-type').value;
+    const bookingTime = document.getElementById('booking-time').value;
+    let baseFee = slotRates[slotType];
+
+    if (bookingTime) {
+        const [hours, minutes] = bookingTime.split(':').map(Number);
+        if ((hours >= 18 && hours <= 23) || (hours >= 0 && hours < 6)) {
+            baseFee += 5;  // Additional charge for night time
+        }
+    }
+
+    document.getElementById('fee').value = baseFee;
+}
+document.addEventListener("DOMContentLoaded", function () {
+    const links = document.querySelectorAll(".sidebar a");
+    const sections = document.querySelectorAll(".section");
+
+    links.forEach(link => {
+        link.addEventListener("click", function (e) {
+            e.preventDefault();
+            const target = document.getElementById(this.id.replace("-link", ""));
+            sections.forEach(section => {
+                section.style.display = "none";
+            });
+            if (target) {
+                target.style.display = "block";
+            }
+        });
+    });
+
+    const moreInfoLinks = document.querySelectorAll(".more-info-link");
+    moreInfoLinks.forEach(link => {
+        link.addEventListener("click", function (e) {
+            e.preventDefault();
+            const target = document.getElementById(this.dataset.target);
+            sections.forEach(section => {
+                section.style.display = "none";
+            });
+            if (target) {
+                target.style.display = "block";
+            }
+        });
+    });
+
+    const settingsButtons = document.querySelectorAll(".settings-button");
+    const settingsSections = document.querySelectorAll(".settings-section");
+
+    settingsButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            settingsSections.forEach(section => {
+                section.style.display = "none";
+            });
+            const target = document.getElementById(this.dataset.target);
+            if (target) {
+                target.style.display = "block";
+            }
+        });
+    });
+
+    document.getElementById("logout-button").addEventListener("click", function () {
+        alert("Logged out successfully");
+    });
+  
+  
+
+    // Adding dynamic price calculation for booking slots
+    const slotTypeElement = document.getElementById("slot-type");
+    const durationElement = document.getElementById("duration");
+    const feeElement = document.getElementById("fee");
+
+    const calculateFee = () => {
+        const slotType = slotTypeElement.value;
+        const duration = parseInt(durationElement.value, 10);
+        let basePrice = slotType === "premium" ? 20 : 10; // Assuming premium is $20 per hour and regular is $10 per hour
+        let totalFee = basePrice * duration;
+        feeElement.value = `$${totalFee.toFixed(2)}`;
+    };
+
+    slotTypeElement.addEventListener("change", calculateFee);
+    durationElement.addEventListener("input", calculateFee);
+
+    // Initial fee calculation
+    calculateFee();
+});
+document.getElementById('account-settings-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const confirmPassword = document.getElementById('confirm-password').value.trim();
+
+    if (!username || !email || !phone || !password || !confirmPassword) {
+        alert('Please fill out all fields.');
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        alert('Passwords do not match.');
+        return;
+    }
+
+    // Save changes logic
+    alert('Profile updated successfully!');
+});
+
+// JavaScript code to handle the booking button click
+document.getElementById('book-button').addEventListener('click', function() {
+    var slotsFree = document.querySelector('.slots-free');
+    var slotsOccupied = document.querySelector('.slots-occupied');
+    
+    // Decrease slots free and increase occupied slots
+    var slotsFreeCount = parseInt(slotsFree.textContent);
+    var slotsOccupiedCount = parseInt(slotsOccupied.textContent);
+    if (slotsFreeCount > 0) {
+        slotsFree.textContent = slotsFreeCount - 1;
+        slotsOccupied.textContent = slotsOccupiedCount + 1;
+        alert('Slot booked');
+    } else {
+        alert('No slots available');
+    }
+});
+
+
+// JavaScript code to handle the booking button click for the second set of nearby sites
+document.getElementById('book-button2').addEventListener('click', function() {
+    var slotsFree = document.querySelector('.slots-free2');
+    var slotsOccupied = document.querySelector('.slots-occupied2');
+    
+    // Decrease slots free and increase occupied slots
+    var slotsFreeCount = parseInt(slotsFree.textContent);
+    var slotsOccupiedCount = parseInt(slotsOccupied.textContent);
+    if (slotsFreeCount > 0) {
+        slotsFree.textContent = slotsFreeCount - 1;
+        slotsOccupied.textContent = slotsOccupiedCount + 1;
+        alert('Slot booked');
+    } else {
+        alert('No slots available');
+    }
+});
+
+// JavaScript code to handle the booking button click for the third set of nearby sites
+document.getElementById('book-button3').addEventListener('click', function() {
+    var slotsFree = document.querySelector('.slots-free3');
+    var slotsOccupied = document.querySelector('.slots-occupied3');
+    
+    // Decrease slots free and increase occupied slots
+    var slotsFreeCount = parseInt(slotsFree.textContent);
+    var slotsOccupiedCount = parseInt(slotsOccupied.textContent);
+    if (slotsFreeCount > 0) {
+        slotsFree.textContent = slotsFreeCount - 1;
+        slotsOccupied.textContent = slotsOccupiedCount + 1;
+        alert('Slot booked');
+    } else {
+        alert('No slots available');
+    }
+});
+
+
+
+
+    </script>
+</body>
+</html>
